@@ -1,21 +1,24 @@
 package org.example;
 
-import org.testng.annotations.Test;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertTrue;
+// 1. SCALE FIX: Inheriting BaseTest handles driver lifecycle injection automatically
+public class MainTest extends BaseTest {
 
-public class MainTest {
     @Test
-    public void mainTest() {
-        // 1. Create an instance of the Main class
-        Main googlePage = new Main();
+    public void verifyGoogleSearchButtonVisibility() {
+        // 2. Pass our active driver into the Page Object instance
+        Main googlePage = new Main(driver);
 
-        // 2. Call the main() method to get the search button
-        WebElement searchButton = googlePage.main();
+        // 3. Sequential navigation step
+        googlePage.navigateToGoogle();
 
-        // 3. The 'Aha!' Moment: Assert that the button is actually displayed
-        // If isDisplayed() is false, TestNG will fail this test and show it as Red.
-        assertTrue(searchButton.isDisplayed(), "The Google Search button was not visible on the page!");
+        // 4. Retrieve element validation state
+        WebElement searchButton = googlePage.getSearchButton();
+
+        // 5. Verification Gate
+        Assert.assertTrue(searchButton.isDisplayed(), "The Google Search button was not visible on the viewport!");
     }
 }
